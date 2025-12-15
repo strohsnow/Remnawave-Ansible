@@ -1,0 +1,28 @@
+---
+- name: Bootstrap
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Install sudo
+      ansible.builtin.apt:
+        name: sudo
+        state: present
+        update_cache: true
+
+    - name: Create user
+      ansible.builtin.user:
+        name: "{{ default_user }}"
+        groups: sudo
+        shell: /bin/bash
+        append: true
+
+    - name: Add authorized key
+      ansible.builtin.authorized_key:
+        user: "{{ default_user }}"
+        key: "{{ lookup('ansible.builtin.file', ssh_public_key_file) }}"
+
+    - name: Add user to sudoers
+      community.general.sudoers:
+        name: "{{ default_user }}"
+        user: "{{ default_user }}"
+        commands: ALL

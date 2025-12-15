@@ -1,0 +1,30 @@
+---
+remnawave_postgres_user: postgres
+remnawave_postgres_password: postgres
+
+remnawave_jwt_auth_secret: secret
+remnawave_jwt_api_tokens_secret: secret
+
+remnawave_metrics_user: admin
+remnawave_metrics_pass: admin
+
+remnawave_caddy_require_mfa: true
+remnawave_caddy_enable_acme_dns: false
+remnawave_caddy_cloudflare_api_token: token
+
+remnawave_base_domain: domain.tld
+remnawave_dash_domain: dash.domain.tld
+remnawave_sub_page_domain: sub.domain.tld
+
+remnawave_auth_path: secret
+remnawave_auth_token_lifetime: 86400
+
+remnawave_authp_admin_email: admin@mail.tld
+remnawave_authp_admin_user: admin
+remnawave_authp_admin_secret: admin
+
+remnawave_telegram_notifications_enabled: "false"
+remnawave_telegram_bot_token: bot:token
+remnawave_telegram_notify_users_chat_id: 1234567890
+remnawave_telegram_notify_nodes_chat_id: 1234567890
+remnawave_telegram_notify_crm_chat_id: 1234567890

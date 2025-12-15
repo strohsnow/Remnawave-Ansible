@@ -1,0 +1,38 @@
+---
+remnawave_path: /opt/remnawave
+
+remnawave_backend_tag: latest
+remnawave_sub_page_tag: latest
+
+remnawave_backend_app_port: 3000
+remnawave_sub_page_app_port: 3010
+
+remnawave_api_instances: 1
+
+remnawave_base_domain: domain.tld
+remnawave_dash_domain: dash.domain.tld
+remnawave_sub_page_domain: sub.domain.tld
+
+remnawave_meta_title: Remnawave
+remnawave_meta_description: Remnawave
+
+remnawave_postgres_host: remnawave-db
+remnawave_postgres_db: remnawave
+remnawave_postgres_user: postgres
+remnawave_postgres_password: postgres
+
+remnawave_redis_host: remnawave-redis
+remnawave_redis_port: 6379
+
+remnawave_jwt_auth_secret: secret
+remnawave_jwt_api_tokens_secret: secret
+
+remnawave_metrics_port: 3001
+remnawave_metrics_user: admin
+remnawave_metrics_pass: admin
+
+remnawave_telegram_notifications_enabled: "false"
+remnawave_telegram_bot_token: bot:token
+remnawave_telegram_notify_users_chat_id: 1234567890
+remnawave_telegram_notify_nodes_chat_id: 1234567890
+remnawave_telegram_notify_crm_chat_id: 1234567890

@@ -1,0 +1,48 @@
+x-common: &common
+  restart: always
+  network_mode: host
+  ulimits:
+    nofile:
+      soft: 1048576
+      hard: 1048576
+
+x-env: &env
+  env_file: .env
+
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: 5
+
+services:
+  remnanode:
+    image: "remnawave/node:${NODE_TAG}"
+    container_name: remnanode
+    hostname: remnanode
+    <<: [*common, *env, *logging]
+    volumes:
+      - {{ remnanode_log_dir_path }}:/var/log/remnanode
+
+  remnanode-caddy:
+    image: "strohsnow/caddy:${CADDY_TAG}"
+    container_name: remnanode-caddy
+    hostname: remnanode-caddy
+    <<: [*common, *env, *logging]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - remnanode-caddy-data:/data
+
+  remnanode-minio:
+    image: "quay.io/minio/minio:${MINIO_TAG}"
+    container_name: remnanode-minio
+    hostname: remnanode-minio
+    <<: [*common, *env, *logging]
+    command: >
+      server /tmp
+      --address "127.0.0.1:9000"
+      --console-address "127.0.0.1:9001"
+
+volumes:
+  remnanode-caddy-data:

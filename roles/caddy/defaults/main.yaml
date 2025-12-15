@@ -1,0 +1,22 @@
+---
+remnawave_caddy_path: /opt/remnawave/caddy
+
+remnawave_caddy_tag: latest
+
+remnawave_caddy_require_mfa: true
+remnawave_caddy_enable_acme_dns: false
+remnawave_caddy_cloudflare_api_token: token
+
+remnawave_base_domain: domain.tld
+remnawave_dash_domain: dash.domain.tld
+remnawave_sub_page_domain: sub.domain.tld
+
+remnawave_backend_app_port: 3000
+remnawave_sub_page_app_port: 3010
+
+remnawave_auth_path: secret
+remnawave_auth_token_lifetime: 86400
+
+remnawave_authp_admin_email: admin@mail.tld
+remnawave_authp_admin_user: admin
+remnawave_authp_admin_secret: admin

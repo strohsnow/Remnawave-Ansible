@@ -1,0 +1,7 @@
+---
+remnanode_node_port: 2222
+
+firewall_additional_rules:
+  - >
+    iptables -A INPUT -p tcp --dport {{ remnanode_node_port }}
+    -s {{ hostvars[groups['remnawave'][0]].ansible_host }} -j ACCEPT

@@ -1,0 +1,94 @@
+{
+{% if remnawave_caddy_enable_acme_dns %}
+  acme_dns cloudflare {$CLOUDFLARE_API_TOKEN}
+{% endif %}
+
+  admin off
+  persist_config off
+
+  order authenticate before respond
+  order authorize before respond
+
+  security {
+    local identity store localdb {
+      realm local
+      path /data/.local/caddy/users.json
+    }
+
+    authentication portal remnawaveportal {
+      crypto default token lifetime {$AUTH_TOKEN_LIFETIME}
+      enable identity store localdb
+      cookie domain {$DASH_DOMAIN}
+      ui {
+        links {
+          "Remnawave" "/dashboard/home" icon "las la-tachometer-alt"
+          "My Identity" "/{$AUTH_PATH}/whoami" icon "las la-user"
+          "API Keys" "/{$AUTH_PATH}/settings/apikeys" icon "las la-key"
+          "MFA" "/{$AUTH_PATH}/settings/mfa" icon "lab la-keycdn"
+        }
+      }
+      transform user {
+        match origin local
+{% if remnawave_caddy_require_mfa %}
+        require mfa
+{% endif %}
+        action add role authp/admin
+      }
+    }
+
+    authorization policy panelpolicy {
+      set auth url /restricted
+      allow roles authp/admin
+      with api key auth portal remnawaveportal realm local
+      acl rule {
+        comment "Accept"
+        match role authp/admin
+        allow stop log info
+      }
+      acl rule {
+        comment "Deny"
+        match any
+        deny log warn
+      }
+    }
+  }
+}
+
+{$DASH_DOMAIN} {
+  @auth_path {
+    path /{$AUTH_PATH} /{$AUTH_PATH}/ /{$AUTH_PATH}/auth
+  }
+  handle @auth_path {
+    rewrite * /auth
+    request_header +X-Forwarded-Prefix /{$AUTH_PATH}
+    authenticate with remnawaveportal
+  }
+
+  handle_path /restricted* {
+    abort
+  }
+
+  route /api/* {
+    authorize with panelpolicy
+    reverse_proxy 127.0.0.1:{$BACKEND_APP_PORT}
+  }
+
+  route /{$AUTH_PATH}* {
+    authenticate with remnawaveportal
+  }
+
+  route /* {
+    authorize with panelpolicy
+    reverse_proxy 127.0.0.1:{$BACKEND_APP_PORT}
+  }
+}
+
+{$SUB_PAGE_DOMAIN} {
+  reverse_proxy 127.0.0.1:{$SUB_PAGE_APP_PORT}
+}
+
+{% if remnawave_caddy_enable_acme_dns %}
+*.{$BASE_DOMAIN} {
+  abort
+}
+{% endif %}

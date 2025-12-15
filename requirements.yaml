@@ -1,0 +1,8 @@
+---
+roles:
+  - name: geerlingguy.docker
+  - name: geerlingguy.firewall
+
+collections:
+  - name: community.general
+  - name: devsec.hardening

@@ -1,0 +1,76 @@
+---
+- name: Install gnupg
+  ansible.builtin.apt:
+    name:
+      - gnupg
+    state: present
+    update_cache: true
+
+- name: Create log directory
+  ansible.builtin.file:
+    path: "{{ tblocker_log_file_path | ansible.builtin.dirname }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: Create log file
+  ansible.builtin.file:
+    path: "{{ tblocker_log_file_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+
+- name: Download repository key
+  ansible.builtin.get_url:
+    url: "{{ tblocker_repo_key_url }}"
+    dest: /tmp/{{ tblocker_repo_name }}.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install repository keyring
+  ansible.builtin.command:
+    cmd: >
+      gpg --yes --dearmor
+      -o /etc/apt/keyrings/{{ tblocker_repo_name }}.gpg
+      /tmp/{{ tblocker_repo_name }}.gpg
+    creates: /etc/apt/keyrings/{{ tblocker_repo_name }}.gpg
+
+- name: Configure repository keyring permissions
+  ansible.builtin.file:
+    path: /etc/apt/keyrings/{{ tblocker_repo_name }}.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure repository
+  ansible.builtin.apt_repository:
+    repo: >
+      deb [arch=any signed-by=/etc/apt/keyrings/{{ tblocker_repo_name }}.gpg]
+      {{ tblocker_repo_url }} stable main
+    filename: "{{ tblocker_repo_name }}"
+
+- name: Install tblocker
+  ansible.builtin.apt:
+    name: "{{ tblocker_package_name }}"
+    state: present
+    update_cache: true
+
+- name: Configure tblocker
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ tblocker_path }}/config.yaml"
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart tblocker
+
+- name: Enable tblocker
+  ansible.builtin.service:
+    name: "{{ tblocker_service_name }}"
+    state: started
+    enabled: true

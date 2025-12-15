@@ -1,0 +1,38 @@
+---
+- name: Create remnawave directory
+  ansible.builtin.file:
+    path: "{{ remnawave_path }}"
+    owner: root
+    group: root
+    mode: '0700'
+    state: directory
+
+- name: Create compose file
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: "{{ remnawave_path }}/docker-compose.yaml"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Create subscription page config file
+  ansible.builtin.template:
+    src: app-config.json.j2
+    dest: "{{ remnawave_path }}/app-config.json"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Create env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ remnawave_path }}/.env"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Start remnawave
+  community.docker.docker_compose_v2:
+    project_src: "{{ remnawave_path }}"
+    remove_orphans: true
+    state: present

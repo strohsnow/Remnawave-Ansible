@@ -1,0 +1,10 @@
+---
+remnawave:
+  hosts:
+    dash:
+      ansible_host: 1.2.3.4
+
+remnanode:
+  hosts:
+    node:
+      ansible_host: 5.6.7.8

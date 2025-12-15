@@ -1,0 +1,14 @@
+---
+tblocker_path: /opt/tblocker
+
+tblocker_package_name: tblocker
+tblocker_service_name: "{{ tblocker_package_name }}"
+
+tblocker_repo_name: xray-tools
+tblocker_repo_url: https://repo.remna.dev/{{ tblocker_repo_name }}
+tblocker_repo_key_url: "{{ tblocker_repo_url }}/public.gpg"
+
+tblocker_log_file_path: /var/log/remnanode/access.log
+tblocker_block_duration: 5
+tblocker_torrent_tag: TORRENT
+tblocker_block_mode: iptables

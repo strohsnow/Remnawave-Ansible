@@ -1,0 +1,71 @@
+---
+- name: Harden hosts
+  hosts: all
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - devsec.hardening.os_hardening
+    - devsec.hardening.ssh_hardening
+  vars:
+    sysctl_overwrite:
+      net.ipv4.ip_forward: 1
+      net.core.default_qdisc: fq
+      net.ipv4.tcp_congestion_control: bbr
+      net.ipv6.conf.all.disable_ipv6: 1
+      net.ipv6.conf.default.disable_ipv6: 1
+  tags:
+    - hardening
+
+- name: Configure firewall
+  hosts: all
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - geerlingguy.firewall
+  tags:
+    - firewall
+
+- name: Install Docker
+  hosts: all
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - geerlingguy.docker
+  tags:
+    - docker
+
+- name: Install Remnawave
+  hosts: remnawave
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - remnawave
+  tags:
+    - remnawave
+
+- name: Install Caddy
+  hosts: remnawave
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - caddy
+  tags:
+    - caddy
+
+- name: Install Remnanode
+  hosts: remnanode
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - remnanode
+  tags:
+    - remnanode
+
+- name: Install tblocker
+  hosts: remnanode
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - tblocker
+  tags:
+    - tblocker

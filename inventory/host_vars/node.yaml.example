@@ -1,0 +1,11 @@
+---
+remnanode_secret_key: secret
+
+remnanode_caddy_enable_acme_dns: false
+remnanode_caddy_cloudflare_api_token: token
+
+remnanode_base_domain: domain.tld
+remnanode_reality_domain: reality.domain.tld
+
+remnanode_minio_root_user: admin
+remnanode_minio_root_password: admin
