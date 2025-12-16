@@ -12,7 +12,6 @@
     - name: Create user
       ansible.builtin.user:
         name: "{{ default_user }}"
-        groups: sudo
         shell: /bin/bash
         append: true
 
