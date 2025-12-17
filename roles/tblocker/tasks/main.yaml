@@ -60,7 +60,7 @@
     state: present
     update_cache: true
 
-- name: Configure tblocker
+- name: Create tblocker config
   ansible.builtin.template:
     src: config.yaml.j2
     dest: "{{ tblocker_path }}/config.yaml"
