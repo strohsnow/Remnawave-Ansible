@@ -38,18 +38,16 @@ services:
       {{ remnawave_redis_host }}:
         condition: service_healthy
 
-  remnawave-sub-page:
+  remnawave-subscription-page:
     image: "remnawave/subscription-page:${SUB_PAGE_TAG}"
-    container_name: remnawave-sub-page
-    hostname: remnawave-sub-page
+    container_name: remnawave-subscription-page
+    hostname: remnawave-subscription-page
     <<: [*common, *env, *logging]
     environment:
       APP_PORT: ${SUB_PAGE_APP_PORT}
       REMNAWAVE_PANEL_URL: http://remnawave:${BACKEND_APP_PORT}
     ports:
       - 127.0.0.1:${SUB_PAGE_APP_PORT}:${SUB_PAGE_APP_PORT}
-    volumes:
-      - ./app-config.json:/opt/app/frontend/assets/app-config.json
     depends_on:
       remnawave:
         condition: service_healthy
