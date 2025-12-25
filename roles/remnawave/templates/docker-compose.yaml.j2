@@ -1,5 +1,7 @@
 x-common: &common
   restart: always
+  networks:
+    - remnawave-network
   ulimits:
     nofile:
       soft: 1048576
@@ -24,7 +26,6 @@ services:
     environment:
       APP_PORT: ${BACKEND_APP_PORT}
     ports:
-      - 127.0.0.1:${BACKEND_APP_PORT}:${BACKEND_APP_PORT}
       - 127.0.0.1:${METRICS_PORT}:${METRICS_PORT}
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:$${METRICS_PORT}/health']
@@ -45,9 +46,6 @@ services:
     <<: [*common, *env, *logging]
     environment:
       APP_PORT: ${SUB_PAGE_APP_PORT}
-      REMNAWAVE_PANEL_URL: http://remnawave:${BACKEND_APP_PORT}
-    ports:
-      - 127.0.0.1:${SUB_PAGE_APP_PORT}:${SUB_PAGE_APP_PORT}
     depends_on:
       remnawave:
         condition: service_healthy
@@ -84,6 +82,10 @@ services:
       interval: 3s
       timeout: 10s
       retries: 3
+
+networks:
+  remnawave-network:
+    name: remnawave-network
 
 volumes:
   {{ remnawave_postgres_host }}-data:
