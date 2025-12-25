@@ -70,7 +70,7 @@
 
   route /api/* {
     authorize with panelpolicy
-    reverse_proxy 127.0.0.1:{$BACKEND_APP_PORT}
+    reverse_proxy remnawave:{$BACKEND_APP_PORT}
   }
 
   route /{$AUTH_PATH}* {
@@ -79,12 +79,12 @@
 
   route /* {
     authorize with panelpolicy
-    reverse_proxy 127.0.0.1:{$BACKEND_APP_PORT}
+    reverse_proxy remnawave:{$BACKEND_APP_PORT}
   }
 }
 
 {$SUB_PAGE_DOMAIN} {
-  reverse_proxy 127.0.0.1:{$SUB_PAGE_APP_PORT}
+  reverse_proxy remnawave-subscription-page:{$SUB_PAGE_APP_PORT}
 }
 
 {% if remnawave_caddy_enable_acme_dns %}
