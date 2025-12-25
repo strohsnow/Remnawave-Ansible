@@ -14,7 +14,9 @@ remnawave_caddy_cloudflare_api_token: token
 
 remnawave_base_domain: domain.tld
 remnawave_dash_domain: dash.domain.tld
+
 remnawave_sub_page_domain: sub.domain.tld
+remnawave_sub_page_api_token: token
 
 remnawave_auth_path: secret
 remnawave_auth_token_lifetime: 86400
