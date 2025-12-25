@@ -1,6 +1,7 @@
 x-common: &common
   restart: always
-  network_mode: host
+  networks:
+    - remnawave-network
   ulimits:
     nofile:
       soft: 1048576
@@ -22,9 +23,16 @@ services:
     container_name: remnawave-caddy
     hostname: remnawave-caddy
     <<: [*common, *env, *logging]
+    ports:
+      - 80:80
+      - 443:443
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - remnawave-caddy-data:/data
+
+networks:
+  remnawave-network:
+    external: true
 
 volumes:
   remnawave-caddy-data:
