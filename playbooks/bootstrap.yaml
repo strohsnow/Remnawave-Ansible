@@ -12,7 +12,6 @@
     - name: Create user
       ansible.builtin.user:
         name: "{{ default_user }}"
-        groups: sudo
         shell: /bin/bash
         append: true
 
@@ -20,3 +19,9 @@
       ansible.builtin.authorized_key:
         user: "{{ default_user }}"
         key: "{{ lookup('ansible.builtin.file', ssh_public_key_file) }}"
+
+    - name: Add user to sudoers
+      community.general.sudoers:
+        name: "{{ default_user }}"
+        user: "{{ default_user }}"
+        commands: ALL
