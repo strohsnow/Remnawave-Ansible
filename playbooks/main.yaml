@@ -1,11 +1,10 @@
 ---
-- name: Harden hosts
+- name: Harden OS
   hosts: all
   remote_user: "{{ default_user }}"
   become: true
   roles:
     - devsec.hardening.os_hardening
-    - devsec.hardening.ssh_hardening
   vars:
     sysctl_overwrite:
       net.ipv4.ip_forward: 1
@@ -14,7 +13,16 @@
       net.ipv6.conf.all.disable_ipv6: 1
       net.ipv6.conf.default.disable_ipv6: 1
   tags:
-    - hardening
+    - os_hardening
+
+- name: Harden SSH
+  hosts: all
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - devsec.hardening.ssh_hardening
+  tags:
+    - ssh_hardening
 
 - name: Configure firewall
   hosts: all
