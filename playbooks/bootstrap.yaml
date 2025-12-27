@@ -13,7 +13,6 @@
       ansible.builtin.user:
         name: "{{ default_user }}"
         shell: /bin/bash
-        append: true
 
     - name: Add authorized key
       ansible.builtin.authorized_key:
