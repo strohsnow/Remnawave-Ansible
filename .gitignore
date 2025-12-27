@@ -1,0 +1,6 @@
+collections/
+inventory/**
+!inventory/**/
+!inventory/**/*.example
+!inventory/group_vars/remnanode.yaml
+roles/geerlingguy.*
