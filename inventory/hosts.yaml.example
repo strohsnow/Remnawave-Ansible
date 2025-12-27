@@ -3,6 +3,7 @@ remnawave:
   hosts:
     dash:
       ansible_host: 1.2.3.4
+      public_ip: 1.2.3.4
 
 remnanode:
   hosts:
