@@ -19,7 +19,7 @@
         user: "{{ default_user }}"
         key: "{{ lookup('ansible.builtin.file', ssh_public_key_file) }}"
 
-    - name: Add user to sudoers
+    - name: Create sudoers file
       community.general.sudoers:
         name: "{{ default_user }}"
         user: "{{ default_user }}"
