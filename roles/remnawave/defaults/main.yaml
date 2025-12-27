@@ -16,7 +16,7 @@ remnawave_sub_page_domain: sub.domain.tld
 remnawave_sub_page_api_token: token
 
 remnawave_postgres_host: remnawave-db
-remnawave_postgres_db: remnawave
+remnawave_postgres_db: postgres
 remnawave_postgres_user: postgres
 remnawave_postgres_password: postgres
 

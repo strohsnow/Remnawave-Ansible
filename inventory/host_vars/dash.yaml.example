@@ -1,4 +1,5 @@
 ---
+remnawave_postgres_db: postgres
 remnawave_postgres_user: postgres
 remnawave_postgres_password: postgres
 
