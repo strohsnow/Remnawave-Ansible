@@ -1,21 +1,18 @@
 ---
 remnanode_path: /opt/remnanode
 
-remnanode_log_dir_path: /var/log/remnanode
-remnanode_enable_logrotate: true
-
 remnanode_node_tag: latest
-remnanode_caddy_tag: latest
-remnanode_minio_tag: latest
 
 remnanode_node_port: 2222
 remnanode_secret_key: secret
 
-remnanode_caddy_enable_acme_dns: false
-remnanode_caddy_cloudflare_api_token: token
+remnanode_logrotate_enable: true
+remnanode_log_dir_path: /var/log/remnanode
 
-remnanode_base_domain: domain.tld
-remnanode_reality_domain: reality.domain.tld
+remnanode_selfsteal_service: ''
 
-remnanode_minio_root_user: admin
-remnanode_minio_root_password: admin
+remnanode_caddy_image: ghcr.io/caddybuilds/caddy-cloudflare
+remnanode_caddy_tag: latest
+
+remnanode_caddy_enable: false
+remnanode_caddy_config: ''

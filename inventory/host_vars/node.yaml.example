@@ -1,11 +1,61 @@
 ---
 remnanode_secret_key: secret
 
-remnanode_caddy_enable_acme_dns: false
+remnanode_minio_root_user: admin
+remnanode_minio_root_password: admin
+
+remnanode_selfsteal_service: |
+  remnanode-minio:
+    image: quay.io/minio/minio:latest
+    container_name: remnanode-minio
+    hostname: remnanode-minio
+    <<: [*common, *logging]
+    environment:
+      MINIO_ROOT_USER: {{ remnanode_minio_root_user}}
+      MINIO_ROOT_PASSWORD: {{ remnanode_minio_root_password }}
+    command: >
+      server /tmp
+      --address "127.0.0.1:9000"
+      --console-address "127.0.0.1:9001"
+
+remnanode_caddy_enable: true
+
+remnanode_caddy_acme_dns_enable: false
 remnanode_caddy_cloudflare_api_token: token
 
 remnanode_base_domain: domain.tld
-remnanode_reality_domain: reality.domain.tld
+remnanode_reality_domain: reality.{{ remnanode_base_domain }}
 
-remnanode_minio_root_user: admin
-remnanode_minio_root_password: admin
+remnanode_caddy_config: |
+  {
+  {% if remnanode_caddy_acme_dns_enable %}
+    acme_dns cloudflare {{ remnanode_caddy_cloudflare_api_token }}
+  {% endif %}
+
+    https_port 8443
+    default_bind 127.0.0.1
+  
+    admin off
+    persist_config off
+  
+    servers {
+      listener_wrappers {
+        proxy_protocol {
+          allow 127.0.0.1/32
+        }
+        tls
+      }
+      protocols h1 h2
+    }
+  }
+  
+  {{ remnanode_reality_domain }} {
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    reverse_proxy 127.0.0.1:9001
+  }
+
+  {% if remnanode_caddy_acme_dns_enable %}
+  *.{{ remnanode_base_domain }} {
+    abort
+  }  
+  {% endif %}

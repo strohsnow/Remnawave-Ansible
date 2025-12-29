@@ -18,15 +18,20 @@ x-logging: &logging
 
 services:
   remnanode:
-    image: "remnawave/node:${NODE_TAG}"
+    image: remnawave/node:{{ remnanode_node_tag }}
     container_name: remnanode
     hostname: remnanode
     <<: [*common, *env, *logging]
+{% if remnanode_logrotate_enable %}
     volumes:
       - {{ remnanode_log_dir_path }}:/var/log/remnanode
+{% endif %}
 
+{{ remnanode_selfsteal_service | ansible.builtin.indent(2, true) }}
+
+{% if remnanode_caddy_enable %}
   remnanode-caddy:
-    image: "strohsnow/caddy:${CADDY_TAG}"
+    image: {{ remnanode_caddy_image }}:{{ remnanode_caddy_tag }}
     container_name: remnanode-caddy
     hostname: remnanode-caddy
     <<: [*common, *env, *logging]
@@ -34,15 +39,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - remnanode-caddy-data:/data
 
-  remnanode-minio:
-    image: "quay.io/minio/minio:${MINIO_TAG}"
-    container_name: remnanode-minio
-    hostname: remnanode-minio
-    <<: [*common, *env, *logging]
-    command: >
-      server /tmp
-      --address "127.0.0.1:9000"
-      --console-address "127.0.0.1:9001"
-
 volumes:
   remnanode-caddy-data:
+    name: remnanode-caddy-data
+{% endif %}

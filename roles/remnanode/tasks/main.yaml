@@ -22,6 +22,7 @@
     owner: root
     group: root
     mode: '0600'
+  when: remnanode_caddy_enable
 
 - name: Create env file
   ansible.builtin.template:
@@ -39,4 +40,4 @@
 
 - name: Configure logrotate
   ansible.builtin.import_tasks: logrotate.yaml
-  when: remnanode_enable_logrotate
+  when: remnanode_logrotate_enable

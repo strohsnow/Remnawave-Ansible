@@ -7,7 +7,7 @@
 
 - name: Create logrotate config file
   ansible.builtin.template:
-    src: remnanode.j2
+    src: logrotate.j2
     dest: /etc/logrotate.d/remnanode
     owner: root
     group: root
