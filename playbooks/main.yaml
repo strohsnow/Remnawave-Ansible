@@ -13,6 +13,7 @@
       net.ipv6.conf.all.disable_ipv6: 1
       net.ipv6.conf.default.disable_ipv6: 1
   tags:
+    - hardening
     - os_hardening
 
 - name: Harden SSH
@@ -22,6 +23,7 @@
   roles:
     - devsec.hardening.ssh_hardening
   tags:
+    - hardening
     - ssh_hardening
 
 - name: Configure firewall
@@ -48,17 +50,9 @@
   become: true
   roles:
     - remnawave
+    - caddy
   tags:
     - remnawave
-
-- name: Install Caddy
-  hosts: remnawave
-  remote_user: "{{ default_user }}"
-  become: true
-  roles:
-    - caddy
-  tags:
-    - caddy
 
 - name: Install Remnanode
   hosts: remnanode
