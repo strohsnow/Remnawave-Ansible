@@ -10,9 +10,9 @@ remnawave_sub_page_app_port: 3010
 remnawave_api_instances: 1
 
 remnawave_base_domain: domain.tld
-remnawave_dash_domain: dash.domain.tld
+remnawave_dash_domain: dash.{{ remnawave_base_domain }}
 
-remnawave_sub_page_domain: sub.domain.tld
+remnawave_sub_page_domain: sub.{{ remnawave_base_domain }}
 remnawave_sub_page_api_token: token
 
 remnawave_postgres_host: remnawave-db

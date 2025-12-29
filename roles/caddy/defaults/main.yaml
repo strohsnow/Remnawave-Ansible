@@ -9,8 +9,8 @@ remnawave_caddy_cloudflare_api_token: token
 remnawave_caddy_mfa_enable: true
 
 remnawave_base_domain: domain.tld
-remnawave_dash_domain: dash.domain.tld
-remnawave_sub_page_domain: sub.domain.tld
+remnawave_dash_domain: dash.{{ remnawave_base_domain }}
+remnawave_sub_page_domain: sub.{{ remnawave_base_domain }}
 
 remnawave_backend_app_port: 3000
 remnawave_sub_page_app_port: 3010
