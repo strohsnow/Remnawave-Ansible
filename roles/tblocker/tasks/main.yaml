@@ -60,6 +60,14 @@
     state: present
     update_cache: true
 
+- name: Create tblocker directory
+  ansible.builtin.file:
+    path: "{{ tblocker_path }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
 - name: Create tblocker config
   ansible.builtin.template:
     src: config.yaml.j2
