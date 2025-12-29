@@ -1,5 +1,5 @@
 {
-{% if remnawave_caddy_enable_acme_dns %}
+{% if remnawave_caddy_acme_dns_enable %}
   acme_dns cloudflare {$CLOUDFLARE_API_TOKEN}
 {% endif %}
 
@@ -29,7 +29,7 @@
       }
       transform user {
         match origin local
-{% if remnawave_caddy_require_mfa %}
+{% if remnawave_caddy_mfa_enable %}
         require mfa
 {% endif %}
         action add role authp/admin
@@ -87,7 +87,7 @@
   reverse_proxy remnawave-subscription-page:{$SUB_PAGE_APP_PORT}
 }
 
-{% if remnawave_caddy_enable_acme_dns %}
+{% if remnawave_caddy_acme_dns_enable %}
 *.{$BASE_DOMAIN} {
   abort
 }

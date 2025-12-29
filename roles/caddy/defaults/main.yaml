@@ -1,11 +1,12 @@
 ---
 remnawave_caddy_path: /opt/remnawave/caddy
 
+remnawave_caddy_image: strohsnow/caddy
 remnawave_caddy_tag: latest
 
-remnawave_caddy_require_mfa: true
-remnawave_caddy_enable_acme_dns: false
+remnawave_caddy_acme_dns_enable: false
 remnawave_caddy_cloudflare_api_token: token
+remnawave_caddy_mfa_enable: true
 
 remnawave_base_domain: domain.tld
 remnawave_dash_domain: dash.domain.tld

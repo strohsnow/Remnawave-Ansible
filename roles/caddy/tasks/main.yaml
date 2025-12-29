@@ -8,8 +8,8 @@
     state: directory
 
 - name: Create compose file
-  ansible.builtin.copy:
-    src: docker-compose.yaml
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
     dest: "{{ remnawave_caddy_path }}/docker-compose.yaml"
     owner: root
     group: root

@@ -19,7 +19,7 @@ x-logging: &logging
 
 services:
   remnawave:
-    image: "remnawave/backend:${BACKEND_TAG}"
+    image: remnawave/backend:{{ remnawave_backend_tag }}
     container_name: remnawave
     hostname: remnawave
     <<: [*common, *env, *logging]
@@ -40,7 +40,7 @@ services:
         condition: service_healthy
 
   remnawave-subscription-page:
-    image: "remnawave/subscription-page:${SUB_PAGE_TAG}"
+    image: remnawave/subscription-page:{{ remnawave_sub_page_tag }}
     container_name: remnawave-subscription-page
     hostname: remnawave-subscription-page
     <<: [*common, *env, *logging]

@@ -19,7 +19,7 @@ x-logging: &logging
 
 services:
   remnawave-caddy:
-    image: "strohsnow/caddy:${CADDY_TAG}"
+    image: {{ remnawave_caddy_image }}:{{ remnawave_caddy_tag }}
     container_name: remnawave-caddy
     hostname: remnawave-caddy
     <<: [*common, *env, *logging]
