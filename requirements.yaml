@@ -4,5 +4,6 @@ roles:
   - name: geerlingguy.firewall
 
 collections:
+  - name: community.docker
   - name: community.general
   - name: devsec.hardening
