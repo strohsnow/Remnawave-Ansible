@@ -29,7 +29,10 @@ remnanode_reality_domain: reality.{{ remnanode_base_domain }}
 remnanode_caddy_config: |
   {
   {% if remnanode_caddy_acme_dns_enable %}
-    acme_dns cloudflare {{ remnanode_caddy_cloudflare_api_token }}
+    cert_issuer acme {
+      dns cloudflare {{ remnanode_caddy_cloudflare_api_token }}
+      resolvers 1.1.1.1 1.0.0.1
+    }
   {% endif %}
 
     https_port 8443
