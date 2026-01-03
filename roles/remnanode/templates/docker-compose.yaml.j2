@@ -27,8 +27,6 @@ services:
       - {{ remnanode_log_dir_path }}:/var/log/remnanode
 {% endif %}
 
-{{ remnanode_selfsteal_service | ansible.builtin.indent(2, true) }}
-
 {% if remnanode_caddy_enable %}
   remnanode-caddy:
     image: {{ remnanode_caddy_image }}:{{ remnanode_caddy_tag }}
@@ -38,6 +36,8 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - remnanode-caddy-data:/data
+
+{{ remnanode_additional_services | ansible.builtin.indent(2, true) }}
 
 volumes:
   remnanode-caddy-data:

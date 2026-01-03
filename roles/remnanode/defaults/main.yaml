@@ -9,10 +9,10 @@ remnanode_secret_key: secret
 remnanode_logrotate_enable: true
 remnanode_log_dir_path: /var/log/remnanode
 
-remnanode_selfsteal_service: ''
-
 remnanode_caddy_image: ghcr.io/caddybuilds/caddy-cloudflare
 remnanode_caddy_tag: latest
 
 remnanode_caddy_enable: false
 remnanode_caddy_config: ''
+
+remnanode_additional_services: ''

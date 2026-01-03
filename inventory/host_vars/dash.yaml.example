@@ -9,15 +9,36 @@ remnawave_jwt_api_tokens_secret: secret
 remnawave_metrics_user: admin
 remnawave_metrics_pass: admin
 
+remnawave_telegram_notifications_enabled: "false"
+remnawave_telegram_bot_token: bot:token
+remnawave_telegram_notify_users_chat_id: 1234567890
+remnawave_telegram_notify_nodes_chat_id: 1234567890
+remnawave_telegram_notify_crm_chat_id: 1234567890
+
+remnawave_sub_page_tag: latest
+remnawave_sub_page_api_token: token
+
+remnawave_additional_services: |
+  remnawave-subscription-page:
+    image: remnawave/subscription-page:{{ remnawave_sub_page_tag }}
+    container_name: remnawave-subscription-page
+    hostname: remnawave-subscription-page
+    <<: [*common, *logging]
+    environment:
+      APP_PORT: 3010
+      REMNAWAVE_PANEL_URL: http://remnawave:3000
+      REMNAWAVE_API_TOKEN: {{ remnawave_sub_page_api_token }}
+    depends_on:
+      remnawave:
+        condition: service_healthy
+
 remnawave_caddy_acme_dns_enable: false
 remnawave_caddy_cloudflare_api_token: token
 remnawave_caddy_mfa_enable: true
 
 remnawave_base_domain: domain.tld
 remnawave_dash_domain: dash.{{ remnawave_base_domain }}
-
 remnawave_sub_page_domain: sub.{{ remnawave_base_domain }}
-remnawave_sub_page_api_token: token
 
 remnawave_auth_path: secret
 remnawave_auth_token_lifetime: 86400
@@ -26,8 +47,102 @@ remnawave_authp_admin_email: admin@mail.tld
 remnawave_authp_admin_user: admin
 remnawave_authp_admin_secret: admin
 
-remnawave_telegram_notifications_enabled: "false"
-remnawave_telegram_bot_token: bot:token
-remnawave_telegram_notify_users_chat_id: 1234567890
-remnawave_telegram_notify_nodes_chat_id: 1234567890
-remnawave_telegram_notify_crm_chat_id: 1234567890
+remnawave_caddy_config: |
+  {
+  {% if remnawave_caddy_acme_dns_enable %}
+    cert_issuer acme {
+      dns cloudflare {$CLOUDFLARE_API_TOKEN}
+      resolvers 1.1.1.1 1.0.0.1
+    }
+  {% endif %}
+  
+    admin off
+    persist_config off
+  
+    order authenticate before respond
+    order authorize before respond
+  
+    security {
+      local identity store localdb {
+        realm local
+        path /data/.local/caddy/users.json
+      }
+  
+      authentication portal remnawaveportal {
+        crypto default token lifetime {$AUTH_TOKEN_LIFETIME}
+        enable identity store localdb
+        cookie domain {$DASH_DOMAIN}
+        ui {
+          links {
+            "Remnawave" "/dashboard/home" icon "las la-tachometer-alt"
+            "My Identity" "/{$AUTH_PATH}/whoami" icon "las la-user"
+            "API Keys" "/{$AUTH_PATH}/settings/apikeys" icon "las la-key"
+            "MFA" "/{$AUTH_PATH}/settings/mfa" icon "lab la-keycdn"
+          }
+        }
+        transform user {
+          match origin local
+  {% if remnawave_caddy_mfa_enable %}
+          require mfa
+  {% endif %}
+          action add role authp/admin
+        }
+      }
+  
+      authorization policy panelpolicy {
+        set auth url /restricted
+        allow roles authp/admin
+        with api key auth portal remnawaveportal realm local
+        acl rule {
+          comment "Accept"
+          match role authp/admin
+          allow stop log info
+        }
+        acl rule {
+          comment "Deny"
+          match any
+          deny log warn
+        }
+      }
+    }
+  }
+  
+  {$DASH_DOMAIN} {
+    @auth_path {
+      path /{$AUTH_PATH} /{$AUTH_PATH}/ /{$AUTH_PATH}/auth
+    }
+    handle @auth_path {
+      rewrite * /auth
+      request_header +X-Forwarded-Prefix /{$AUTH_PATH}
+      authenticate with remnawaveportal
+    }
+  
+    handle_path /restricted* {
+      abort
+    }
+  
+    route /api/* {
+      authorize with panelpolicy
+      reverse_proxy remnawave:{$BACKEND_APP_PORT}
+    }
+  
+    route /{$AUTH_PATH}* {
+      authenticate with remnawaveportal
+    }
+  
+    route /* {
+      authorize with panelpolicy
+      reverse_proxy remnawave:{$BACKEND_APP_PORT}
+    }
+  }
+  
+  {{ remnawave_sub_page_domain }} {
+    reverse_proxy remnawave-subscription-page:3010
+  }
+  
+  {% if remnawave_caddy_acme_dns_enable %}
+  *.{$BASE_DOMAIN} {
+    abort
+  }
+  {% endif %}
+  

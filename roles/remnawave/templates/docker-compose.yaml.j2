@@ -23,8 +23,6 @@ services:
     container_name: remnawave
     hostname: remnawave
     <<: [*common, *env, *logging]
-    environment:
-      APP_PORT: ${BACKEND_APP_PORT}
     ports:
       - 127.0.0.1:${METRICS_PORT}:${METRICS_PORT}
     healthcheck:
@@ -37,17 +35,6 @@ services:
       {{ remnawave_postgres_host }}:
         condition: service_healthy
       {{ remnawave_redis_host }}:
-        condition: service_healthy
-
-  remnawave-subscription-page:
-    image: remnawave/subscription-page:{{ remnawave_sub_page_tag }}
-    container_name: remnawave-subscription-page
-    hostname: remnawave-subscription-page
-    <<: [*common, *env, *logging]
-    environment:
-      APP_PORT: ${SUB_PAGE_APP_PORT}
-    depends_on:
-      remnawave:
         condition: service_healthy
 
   {{ remnawave_postgres_host }}:
@@ -82,6 +69,8 @@ services:
       interval: 3s
       timeout: 10s
       retries: 3
+
+{{ remnawave_additional_services | ansible.builtin.indent(2, true) }}
 
 networks:
   remnawave-network:
