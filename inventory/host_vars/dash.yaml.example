@@ -54,7 +54,7 @@ remnawave_caddy_config: |
   {
   {% if remnawave_caddy_acme_dns_enable %}
     cert_issuer acme {
-      dns cloudflare {$CLOUDFLARE_API_TOKEN}
+      dns cloudflare {{ remnawave_caddy_cloudflare_api_token }}
       resolvers 1.1.1.1 1.0.0.1
     }
   {% endif %}
@@ -72,15 +72,15 @@ remnawave_caddy_config: |
       }
   
       authentication portal remnawaveportal {
-        crypto default token lifetime {$AUTH_TOKEN_LIFETIME}
+        crypto default token lifetime {{ remnawave_auth_token_lifetime }}
         enable identity store localdb
-        cookie domain {$DASH_DOMAIN}
+        cookie domain {{ remnawave_dash_domain }}
         ui {
           links {
             "Remnawave" "/dashboard/home" icon "las la-tachometer-alt"
-            "My Identity" "/{$AUTH_PATH}/whoami" icon "las la-user"
-            "API Keys" "/{$AUTH_PATH}/settings/apikeys" icon "las la-key"
-            "MFA" "/{$AUTH_PATH}/settings/mfa" icon "lab la-keycdn"
+            "My Identity" "/{{ remnawave_auth_path }}/whoami" icon "las la-user"
+            "API Keys" "/{{ remnawave_auth_path }}/settings/apikeys" icon "las la-key"
+            "MFA" "/{{ remnawave_auth_path }}/settings/mfa" icon "lab la-keycdn"
           }
         }
         transform user {
@@ -110,13 +110,15 @@ remnawave_caddy_config: |
     }
   }
   
-  {$DASH_DOMAIN} {
+  {{ remnawave_dash_domain }} {
     @auth_path {
-      path /{$AUTH_PATH} /{$AUTH_PATH}/ /{$AUTH_PATH}/auth
+      path /{{ remnawave_auth_path }}
+      path /{{ remnawave_auth_path }}/
+      path /{{ remnawave_auth_path }}/auth
     }
     handle @auth_path {
       rewrite * /auth
-      request_header +X-Forwarded-Prefix /{$AUTH_PATH}
+      request_header +X-Forwarded-Prefix /{{ remnawave_auth_path }}
       authenticate with remnawaveportal
     }
   
@@ -126,16 +128,16 @@ remnawave_caddy_config: |
   
     route /api/* {
       authorize with panelpolicy
-      reverse_proxy remnawave:{$BACKEND_APP_PORT}
+      reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
   
-    route /{$AUTH_PATH}* {
+    route /{{ remnawave_auth_path }}* {
       authenticate with remnawaveportal
     }
   
     route /* {
       authorize with panelpolicy
-      reverse_proxy remnawave:{$BACKEND_APP_PORT}
+      reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
   }
   
@@ -144,7 +146,7 @@ remnawave_caddy_config: |
   }
   
   {% if remnawave_caddy_acme_dns_enable %}
-  *.{$BASE_DOMAIN} {
+  *.{{ remnawave_base_domain }} {
     abort
   }
   {% endif %}

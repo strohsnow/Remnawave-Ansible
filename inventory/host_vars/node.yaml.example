@@ -4,7 +4,7 @@ remnanode_secret_key: secret
 remnanode_minio_root_user: admin
 remnanode_minio_root_password: admin
 
-remnanode_selfsteal_service: |
+remnanode_additional_services: |
   remnanode-minio:
     image: quay.io/minio/minio:latest
     container_name: remnanode-minio
