@@ -36,9 +36,11 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - remnanode-caddy-data:/data
+{% endif %}
 
 {{ remnanode_additional_services | ansible.builtin.indent(2, true) }}
 
+{% if remnanode_caddy_enable %}
 volumes:
   remnanode-caddy-data:
     name: remnanode-caddy-data
