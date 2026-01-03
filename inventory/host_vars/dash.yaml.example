@@ -15,6 +15,9 @@ remnawave_telegram_notify_users_chat_id: 1234567890
 remnawave_telegram_notify_nodes_chat_id: 1234567890
 remnawave_telegram_notify_crm_chat_id: 1234567890
 
+remnawave_backend_app_port: 3000
+remnawave_sub_page_app_port: 3010
+
 remnawave_sub_page_tag: latest
 remnawave_sub_page_api_token: token
 
@@ -25,8 +28,8 @@ remnawave_additional_services: |
     hostname: remnawave-subscription-page
     <<: [*common, *logging]
     environment:
-      APP_PORT: 3010
-      REMNAWAVE_PANEL_URL: http://remnawave:3000
+      APP_PORT: {{ remnawave_sub_page_app_port }}
+      REMNAWAVE_PANEL_URL: http://remnawave:{{ remnawave_backend_app_port }}
       REMNAWAVE_API_TOKEN: {{ remnawave_sub_page_api_token }}
     depends_on:
       remnawave:
@@ -137,7 +140,7 @@ remnawave_caddy_config: |
   }
   
   {{ remnawave_sub_page_domain }} {
-    reverse_proxy remnawave-subscription-page:3010
+    reverse_proxy remnawave-subscription-page:{{ remnawave_sub_page_app_port }}
   }
   
   {% if remnawave_caddy_acme_dns_enable %}
