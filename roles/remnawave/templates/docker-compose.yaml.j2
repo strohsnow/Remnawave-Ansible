@@ -65,7 +65,7 @@ services:
       --maxmemory-policy noeviction
       --loglevel warning
     healthcheck:
-      test: ['CMD', 'valkey-cli', '-p', '$${REDIS_PORT}', 'ping']
+      test: ['CMD', 'valkey-cli', 'ping']
       interval: 3s
       timeout: 10s
       retries: 3
