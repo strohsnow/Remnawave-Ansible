@@ -8,3 +8,10 @@ firewall_allowed_tcp_ports:
   - "22"
   - "80"
   - "443"
+
+remnawave_backend_tag: latest
+remnawave_sub_page_tag: latest
+remnawave_caddy_tag: 2.10.2
+
+remnanode_node_tag: latest
+remnanode_caddy_tag: 2.10.2
