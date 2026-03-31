@@ -1,5 +1,0 @@
----
-- name: Restart tblocker
-  ansible.builtin.service:
-    name: "{{ tblocker_service_name }}"
-    state: restarted

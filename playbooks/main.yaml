@@ -62,12 +62,3 @@
     - remnanode
   tags:
     - remnanode
-
-- name: Install tblocker
-  hosts: remnanode
-  remote_user: "{{ default_user }}"
-  become: true
-  roles:
-    - tblocker
-  tags:
-    - tblocker
