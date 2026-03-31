@@ -17,7 +17,7 @@ remnawave_postgres_user: postgres
 remnawave_postgres_password: postgres
 
 remnawave_redis_host: remnawave-redis
-remnawave_redis_port: 6379
+remnawave_redis_socket: valkey.sock
 
 remnawave_jwt_auth_secret: secret
 remnawave_jwt_api_tokens_secret: secret
@@ -28,8 +28,10 @@ remnawave_metrics_pass: admin
 
 remnawave_telegram_notifications_enabled: "false"
 remnawave_telegram_bot_token: bot:token
-remnawave_telegram_notify_users_chat_id: 1234567890
-remnawave_telegram_notify_nodes_chat_id: 1234567890
-remnawave_telegram_notify_crm_chat_id: 1234567890
+remnawave_telegram_notify_users: 1234567890:1
+remnawave_telegram_notify_nodes: 1234567890:1
+remnawave_telegram_notify_crm: 1234567890:1
+remnawave_telegram_notify_service: 1234567890:1
+remnawave_telegram_notify_tblocker: 1234567890:1
 
 remnawave_additional_services: ''

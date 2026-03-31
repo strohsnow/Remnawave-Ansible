@@ -25,6 +25,8 @@ services:
     <<: [*common, *env, *logging]
     ports:
       - 127.0.0.1:${METRICS_PORT}:${METRICS_PORT}
+    volumes:
+      - {{ remnawave_redis_host }}-socket:/var/run/valkey
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:$${METRICS_PORT}/health']
       interval: 30s
@@ -53,19 +55,23 @@ services:
       retries: 3
 
   {{ remnawave_redis_host }}:
-    image: valkey/valkey:8.1-alpine
+    image: valkey/valkey:9-alpine
     container_name: {{ remnawave_redis_host }}
     hostname: {{ remnawave_redis_host }}
     <<: [*common, *env, *logging]
+    volumes:
+      - {{ remnawave_redis_host }}-socket:/var/run/valkey
     command: >
       valkey-server
-      --port ${REDIS_PORT}
       --save ""
       --appendonly no
       --maxmemory-policy noeviction
       --loglevel warning
+      --unixsocket /var/run/valkey/{{ remnawave_redis_socket }}
+      --unixsocketperm 777
+      --port 0
     healthcheck:
-      test: ['CMD', 'valkey-cli', 'ping']
+      test: ['CMD', 'valkey-cli', '-s', '/var/run/valkey/{{ remnawave_redis_socket }}', 'ping']
       interval: 3s
       timeout: 10s
       retries: 3
@@ -79,3 +85,5 @@ networks:
 volumes:
   {{ remnawave_postgres_host }}-data:
     name: {{ remnawave_postgres_host }}-data
+  {{ remnawave_redis_host }}-socket:
+    name: {{ remnawave_redis_host }}-socket
