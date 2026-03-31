@@ -21,6 +21,8 @@ services:
     image: remnawave/node:{{ remnanode_node_tag }}
     container_name: remnanode
     hostname: remnanode
+    cap_add:
+      - NET_ADMIN
     <<: [*common, *env, *logging]
 {% if remnanode_logrotate_enable %}
     volumes:
