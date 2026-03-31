@@ -24,3 +24,8 @@
         name: "{{ default_user }}"
         user: "{{ default_user }}"
         commands: ALL
+
+    - name: Generate host SSH keys
+      ansible.builtin.command:
+        cmd: ssh-keygen -A
+      changed_when: true
