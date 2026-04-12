@@ -30,6 +30,8 @@
   hosts: all
   remote_user: "{{ default_user }}"
   become: true
+  vars:
+    firewall_flush_rules_and_chains: false
   roles:
     - geerlingguy.firewall
   tags:
