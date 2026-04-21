@@ -32,7 +32,6 @@
   become: true
   vars:
     firewall_flush_rules_and_chains: false
-    firewall_disable_ufw: true
   roles:
     - geerlingguy.firewall
   tags:
