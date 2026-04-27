@@ -1,0 +1,14 @@
+---
+- name: Reload Caddy config
+  community.docker.docker_compose_v2_exec:
+    project_src: "{{ remnanode_path }}"
+    service: remnanode-caddy
+    command: caddy reload --config /etc/caddy/Caddyfile
+  when: remnanode_caddy_enable
+
+- name: Restart remnanode
+  community.docker.docker_compose_v2:
+    project_src: "{{ remnanode_path }}"
+    services:
+      - remnanode
+    state: restarted

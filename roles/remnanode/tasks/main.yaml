@@ -15,15 +15,6 @@
     group: root
     mode: '0600'
 
-- name: Create Caddyfile
-  ansible.builtin.template:
-    src: Caddyfile.j2
-    dest: "{{ remnanode_path }}/Caddyfile"
-    owner: root
-    group: root
-    mode: '0600'
-  when: remnanode_caddy_enable
-
 - name: Create env file
   ansible.builtin.template:
     src: env.j2
@@ -31,6 +22,26 @@
     owner: root
     group: root
     mode: '0600'
+  notify: Restart remnanode
+
+- name: Create Caddy config directory
+  ansible.builtin.file:
+    path: "{{ remnanode_caddy_config_path }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+  when: remnanode_caddy_enable
+
+- name: Create Caddyfile
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: "{{ remnanode_caddy_config_path }}/Caddyfile"
+    owner: root
+    group: root
+    mode: '0600'
+  when: remnanode_caddy_enable
+  notify: Reload Caddy
 
 - name: Start remnanode
   community.docker.docker_compose_v2:

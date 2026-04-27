@@ -41,7 +41,7 @@ services:
     hostname: remnanode-caddy
     <<: [*common, *env, *logging]
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - {{ remnanode_caddy_config_path }}:/etc/caddy
       - remnanode-caddy-data:/data
 {% endif %}
 

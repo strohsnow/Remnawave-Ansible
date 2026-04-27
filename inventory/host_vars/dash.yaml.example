@@ -59,7 +59,6 @@ remnawave_caddy_config: |
     }
   {% endif %}
   
-    admin off
     persist_config off
   
     order authenticate before respond

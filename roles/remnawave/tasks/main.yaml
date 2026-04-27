@@ -22,6 +22,7 @@
     owner: root
     group: root
     mode: '0600'
+  notify: Restart remnawave
 
 - name: Start remnawave
   community.docker.docker_compose_v2:

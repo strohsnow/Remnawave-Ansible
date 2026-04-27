@@ -20,6 +20,7 @@ remnawave_authp_admin_secret: admin
 
 remnawave_backend_app_port: 3000
 
+remnawave_caddy_config_path: "{{ remnawave_caddy_path }}/config"
 remnawave_caddy_config: |
   {
   {% if remnawave_caddy_acme_dns_enable %}
@@ -29,7 +30,6 @@ remnawave_caddy_config: |
     }
   {% endif %}
   
-    admin off
     persist_config off
   
     order authenticate before respond
