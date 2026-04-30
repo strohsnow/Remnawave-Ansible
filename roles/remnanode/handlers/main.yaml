@@ -1,5 +1,5 @@
 ---
-- name: Reload Caddy config
+- name: Reload Caddy
   community.docker.docker_compose_v2_exec:
     project_src: "{{ remnanode_path }}"
     service: remnanode-caddy
