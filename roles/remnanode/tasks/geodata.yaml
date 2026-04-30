@@ -1,0 +1,34 @@
+---
+- name: Install cron
+  ansible.builtin.apt:
+    name: cron
+    state: present
+    update_cache: true
+
+- name: Create geodata directory
+  ansible.builtin.file:
+    path: "{{ remnanode_geodata_path }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: Create geodata update script
+  ansible.builtin.template:
+    src: update-geodata.sh.j2
+    dest: /usr/local/bin/update-geodata.sh
+    owner: root
+    group: root
+    mode: '0500'
+
+- name: Run geodata update script
+  ansible.builtin.command:
+    cmd: /usr/local/bin/update-geodata.sh
+
+- name: Schedule geodata update
+  ansible.builtin.cron:
+    name: "Update xray geodata"
+    hour: "0"
+    minute: "0"
+    user: root
+    job: "/usr/local/bin/update-geodata.sh"
