@@ -1,0 +1,31 @@
+---
+- name: Assert remnawave_base_domain
+  ansible.builtin.assert:
+    that: remnawave_base_domain | length > 0
+    fail_msg: "remnawave_base_domain is required"
+
+- name: Assert remnawave_auth_path
+  ansible.builtin.assert:
+    that: remnawave_auth_path | length > 0
+    fail_msg: "remnawave_auth_path is required"
+
+- name: Assert remnawave_authp_admin_email
+  ansible.builtin.assert:
+    that: remnawave_authp_admin_email | length > 0
+    fail_msg: "remnawave_authp_admin_email is required"
+
+- name: Assert remnawave_authp_admin_user
+  ansible.builtin.assert:
+    that: remnawave_authp_admin_user | length > 0
+    fail_msg: "remnawave_authp_admin_user is required"
+
+- name: Assert remnawave_authp_admin_secret
+  ansible.builtin.assert:
+    that: remnawave_authp_admin_secret | length > 0
+    fail_msg: "remnawave_authp_admin_secret is required"
+
+- name: Assert remnawave_caddy_cloudflare_api_token
+  ansible.builtin.assert:
+    that: remnawave_caddy_cloudflare_api_token | length > 0
+    fail_msg: "remnawave_caddy_cloudflare_api_token is required when remnawave_caddy_acme_dns_enable is true"
+  when: remnawave_caddy_acme_dns_enable

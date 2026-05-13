@@ -5,18 +5,18 @@ remnawave_caddy_image: strohsnow/caddy
 remnawave_caddy_tag: latest
 
 remnawave_caddy_acme_dns_enable: false
-remnawave_caddy_cloudflare_api_token: token
+remnawave_caddy_cloudflare_api_token: ""
 remnawave_caddy_mfa_enable: true
 
-remnawave_base_domain: domain.tld
+remnawave_base_domain: ""
 remnawave_dash_domain: dash.{{ remnawave_base_domain }}
 
-remnawave_auth_path: secret
+remnawave_auth_path: ""
 remnawave_auth_token_lifetime: 86400
 
-remnawave_authp_admin_email: admin@mail.tld
-remnawave_authp_admin_user: admin
-remnawave_authp_admin_secret: admin
+remnawave_authp_admin_email: ""
+remnawave_authp_admin_user: ""
+remnawave_authp_admin_secret: ""
 
 remnawave_backend_app_port: 3000
 
@@ -25,22 +25,22 @@ remnawave_caddy_config: |
   {
   {% if remnawave_caddy_acme_dns_enable %}
     cert_issuer acme {
-      dns cloudflare {{ remnawave_caddy_cloudflare_api_token }}
+      dns cloudflare {env.CLOUDFLARE_API_TOKEN}
       resolvers 1.1.1.1 1.0.0.1
     }
   {% endif %}
-  
+
     persist_config off
-  
+
     order authenticate before respond
     order authorize before respond
-  
+
     security {
       local identity store localdb {
         realm local
         path /data/.local/caddy/users.json
       }
-  
+
       authentication portal remnawaveportal {
         crypto default token lifetime {{ remnawave_auth_token_lifetime }}
         enable identity store localdb
@@ -61,7 +61,7 @@ remnawave_caddy_config: |
           action add role authp/admin
         }
       }
-  
+
       authorization policy panelpolicy {
         set auth url /restricted
         allow roles authp/admin
@@ -79,7 +79,7 @@ remnawave_caddy_config: |
       }
     }
   }
-  
+
   {{ remnawave_dash_domain }} {
     @auth_path {
       path /{{ remnawave_auth_path }}
@@ -91,29 +91,28 @@ remnawave_caddy_config: |
       request_header +X-Forwarded-Prefix /{{ remnawave_auth_path }}
       authenticate with remnawaveportal
     }
-  
+
     handle_path /restricted* {
       abort
     }
-  
+
     route /api/* {
       authorize with panelpolicy
       reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
-  
+
     route /{{ remnawave_auth_path }}* {
       authenticate with remnawaveportal
     }
-  
+
     route /* {
       authorize with panelpolicy
       reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
   }
-  
+
   {% if remnawave_caddy_acme_dns_enable %}
   *.{{ remnawave_base_domain }} {
     abort
   }
   {% endif %}
-  
