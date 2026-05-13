@@ -1,7 +1,9 @@
 ---
-- name: Install cron
+- name: Install cron and curl
   ansible.builtin.apt:
-    name: cron
+    name:
+      - cron
+      - curl
     state: present
     update_cache: true
 
