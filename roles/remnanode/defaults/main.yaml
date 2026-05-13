@@ -6,7 +6,7 @@ remnanode_node_tag: latest
 remnanode_node_port: 2222
 remnanode_secret_key: ""
 
-remnanode_geodata_enable: true
+remnanode_geodata_enable: false
 remnanode_geodata_path: "{{ remnanode_path }}/geodata"
 remnanode_geodata_files:
   - url: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
