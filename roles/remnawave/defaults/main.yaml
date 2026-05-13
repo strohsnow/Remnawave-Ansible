@@ -7,31 +7,32 @@ remnawave_backend_app_port: 3000
 
 remnawave_api_instances: 1
 
-remnawave_base_domain: domain.tld
+remnawave_base_domain: ""
 remnawave_dash_domain: dash.{{ remnawave_base_domain }}
 remnawave_sub_page_domain: sub.{{ remnawave_base_domain }}
 
 remnawave_postgres_host: remnawave-db
 remnawave_postgres_db: postgres
 remnawave_postgres_user: postgres
-remnawave_postgres_password: postgres
+remnawave_postgres_password: ""
 
 remnawave_redis_host: remnawave-redis
 remnawave_redis_socket: valkey.sock
 
-remnawave_jwt_auth_secret: secret
-remnawave_jwt_api_tokens_secret: secret
+remnawave_jwt_auth_secret: ""
+remnawave_jwt_api_tokens_secret: ""
 
 remnawave_metrics_port: 3001
 remnawave_metrics_user: admin
-remnawave_metrics_pass: admin
+remnawave_metrics_pass: ""
 
 remnawave_telegram_notifications_enabled: "false"
-remnawave_telegram_bot_token: bot:token
-remnawave_telegram_notify_users: 1234567890:1
-remnawave_telegram_notify_nodes: 1234567890:1
-remnawave_telegram_notify_crm: 1234567890:1
-remnawave_telegram_notify_service: 1234567890:1
-remnawave_telegram_notify_tblocker: 1234567890:1
+remnawave_telegram_bot_token: ""
+remnawave_telegram_notify_all: ""
+remnawave_telegram_notify_users: "{{ remnawave_telegram_notify_all }}"
+remnawave_telegram_notify_nodes: "{{ remnawave_telegram_notify_all }}"
+remnawave_telegram_notify_crm: "{{ remnawave_telegram_notify_all }}"
+remnawave_telegram_notify_service: "{{ remnawave_telegram_notify_all }}"
+remnawave_telegram_notify_tblocker: "{{ remnawave_telegram_notify_all }}"
 
-remnawave_additional_services: ''
+remnawave_additional_services: ""

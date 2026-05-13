@@ -1,10 +1,13 @@
 ---
+- name: Assert required variables
+  ansible.builtin.import_tasks: assert.yaml
+
 - name: Create remnawave directory
   ansible.builtin.file:
     path: "{{ remnawave_path }}"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
     state: directory
 
 - name: Create compose file
@@ -13,7 +16,7 @@
     dest: "{{ remnawave_path }}/docker-compose.yaml"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0644"
 
 - name: Create env file
   ansible.builtin.template:
@@ -21,7 +24,7 @@
     dest: "{{ remnawave_path }}/.env"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
   notify: Restart remnawave
 
 - name: Start remnawave
