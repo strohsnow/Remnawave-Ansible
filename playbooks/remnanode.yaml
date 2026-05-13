@@ -1,0 +1,9 @@
+---
+- name: Install Remnanode
+  hosts: remnanode
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - remnanode
+  tags:
+    - remnanode
