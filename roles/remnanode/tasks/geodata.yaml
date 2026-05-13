@@ -10,7 +10,7 @@
     path: "{{ remnanode_geodata_path }}"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
     state: directory
 
 - name: Create geodata update script
@@ -19,7 +19,7 @@
     dest: /usr/local/bin/update-geodata.sh
     owner: root
     group: root
-    mode: '0500'
+    mode: "0755"
 
 - name: Run geodata update script
   ansible.builtin.command:

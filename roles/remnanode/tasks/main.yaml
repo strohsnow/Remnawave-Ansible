@@ -1,10 +1,13 @@
 ---
+- name: Assert required variables
+  ansible.builtin.import_tasks: assert.yaml
+
 - name: Create remnanode directory
   ansible.builtin.file:
     path: "{{ remnanode_path }}"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
     state: directory
 
 - name: Create compose file
@@ -13,7 +16,7 @@
     dest: "{{ remnanode_path }}/docker-compose.yaml"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0644"
 
 - name: Create env file
   ansible.builtin.template:
@@ -21,7 +24,7 @@
     dest: "{{ remnanode_path }}/.env"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
   notify: Restart remnanode
 
 - name: Create Caddy config directory
@@ -29,7 +32,7 @@
     path: "{{ remnanode_caddy_config_path }}"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
     state: directory
   when: remnanode_caddy_enable
 
@@ -39,7 +42,7 @@
     dest: "{{ remnanode_caddy_config_path }}/Caddyfile"
     owner: root
     group: root
-    mode: '0600'
+    mode: "0644"
   when: remnanode_caddy_enable
   notify: Reload Caddy
 

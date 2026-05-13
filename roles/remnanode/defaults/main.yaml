@@ -4,14 +4,14 @@ remnanode_path: /opt/remnanode
 remnanode_node_tag: latest
 
 remnanode_node_port: 2222
-remnanode_secret_key: secret
+remnanode_secret_key: ""
 
 remnanode_geodata_enable: true
 remnanode_geodata_path: "{{ remnanode_path }}/geodata"
 remnanode_geodata_files:
   - url: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
     name: geoip.dat
-  - url: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat 
+  - url: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
     name: geosite.dat
 
 remnanode_logrotate_enable: true
@@ -23,6 +23,6 @@ remnanode_caddy_image: ghcr.io/caddybuilds/caddy-cloudflare
 remnanode_caddy_tag: latest
 
 remnanode_caddy_config_path: "{{ remnanode_path }}/config"
-remnanode_caddy_config: ''
+remnanode_caddy_config: ""
 
-remnanode_additional_services: ''
+remnanode_additional_services: ""

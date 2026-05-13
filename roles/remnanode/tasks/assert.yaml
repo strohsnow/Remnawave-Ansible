@@ -1,0 +1,5 @@
+---
+- name: Assert remnanode_secret_key
+  ansible.builtin.assert:
+    that: remnanode_secret_key | length > 0
+    fail_msg: "remnanode_secret_key is required"

@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-DEST_DIR="{{ remnanode_geodata_path }}"
-
 download_file() {
   local url="$1"
   local dest="$2"
@@ -12,12 +10,12 @@ download_file() {
 
   curl -fsSL "${url}" -o "${tmp}"
   mv "${tmp}" "${dest}"
-  chmod 0600 "${dest}"
+  chmod 0644 "${dest}"
 }
 
 {% for geodata in remnanode_geodata_files %}
 download_file \
   "{{ geodata.url }}" \
-  "${DEST_DIR}/{{ geodata.name }}"
+  "{{ remnanode_geodata_path }}/{{ geodata.name }}"
 
 {% endfor %}
