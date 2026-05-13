@@ -54,22 +54,22 @@ remnawave_caddy_config: |
   {
   {% if remnawave_caddy_acme_dns_enable %}
     cert_issuer acme {
-      dns cloudflare {{ remnawave_caddy_cloudflare_api_token }}
+      dns cloudflare {env.CLOUDFLARE_API_TOKEN}
       resolvers 1.1.1.1 1.0.0.1
     }
   {% endif %}
-  
+
     persist_config off
-  
+
     order authenticate before respond
     order authorize before respond
-  
+
     security {
       local identity store localdb {
         realm local
         path /data/.local/caddy/users.json
       }
-  
+
       authentication portal remnawaveportal {
         crypto default token lifetime {{ remnawave_auth_token_lifetime }}
         enable identity store localdb
@@ -90,7 +90,7 @@ remnawave_caddy_config: |
           action add role authp/admin
         }
       }
-  
+
       authorization policy panelpolicy {
         set auth url /restricted
         allow roles authp/admin
@@ -108,7 +108,7 @@ remnawave_caddy_config: |
       }
     }
   }
-  
+
   {{ remnawave_dash_domain }} {
     @auth_path {
       path /{{ remnawave_auth_path }}
@@ -120,33 +120,32 @@ remnawave_caddy_config: |
       request_header +X-Forwarded-Prefix /{{ remnawave_auth_path }}
       authenticate with remnawaveportal
     }
-  
+
     handle_path /restricted* {
       abort
     }
-  
+
     route /api/* {
       authorize with panelpolicy
       reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
-  
+
     route /{{ remnawave_auth_path }}* {
       authenticate with remnawaveportal
     }
-  
+
     route /* {
       authorize with panelpolicy
       reverse_proxy remnawave:{{ remnawave_backend_app_port }}
     }
   }
-  
+
   {{ remnawave_sub_page_domain }} {
     reverse_proxy remnawave-subscription-page:{{ remnawave_sub_page_app_port }}
   }
-  
+
   {% if remnawave_caddy_acme_dns_enable %}
   *.{{ remnawave_base_domain }} {
     abort
   }
   {% endif %}
-  
