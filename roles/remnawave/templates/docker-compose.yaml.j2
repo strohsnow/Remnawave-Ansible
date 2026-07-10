@@ -40,14 +40,14 @@ services:
         condition: service_healthy
 
   {{ remnawave_postgres_host }}:
-    image: postgres:17.6
+    image: postgres:18.4
     container_name: {{ remnawave_postgres_host }}
     hostname: {{ remnawave_postgres_host }}
     <<: [*common, *env, *logging]
     environment:
       TZ: UTC
     volumes:
-      - {{ remnawave_postgres_host }}-data:/var/lib/postgresql/data
+      - {{ remnawave_postgres_host }}-data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
       interval: 3s

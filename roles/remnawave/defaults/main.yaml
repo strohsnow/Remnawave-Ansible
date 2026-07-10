@@ -35,4 +35,7 @@ remnawave_telegram_notify_crm: "{{ remnawave_telegram_notify_all }}"
 remnawave_telegram_notify_service: "{{ remnawave_telegram_notify_all }}"
 remnawave_telegram_notify_tblocker: "{{ remnawave_telegram_notify_all }}"
 
+remnawave_expiration_notifications_enabled: "true"
+remnawave_expiration_notifications: "[-72, -48, -24, 24]"
+
 remnawave_additional_services: ""
