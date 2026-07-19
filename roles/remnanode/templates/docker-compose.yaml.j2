@@ -24,13 +24,8 @@ services:
     cap_add:
       - NET_ADMIN
     <<: [*common, *env, *logging]
-{% if remnanode_geodata_enable or remnanode_logrotate_enable or remnanode_caddy_enable %}
+{% if remnanode_logrotate_enable or remnanode_caddy_enable %}
     volumes:
-{% if remnanode_geodata_enable %}
-{% for geodata in remnanode_geodata_files %}
-      - {{ remnanode_geodata_path }}/{{ geodata.name }}:/usr/local/share/xray/{{ geodata.name }}:ro
-{% endfor %}
-{% endif %}
 {% if remnanode_logrotate_enable %}
       - {{ remnanode_log_dir_path }}:/var/log/remnanode
 {% endif %}
@@ -46,9 +41,6 @@ services:
     hostname: remnanode-caddy
     <<: [*common, *env, *logging]
     volumes:
-{% if remnanode_geodata_enable %}
-      - {{ remnanode_geodata_path }}:/srv/geodata:ro
-{% endif %}
       - {{ remnanode_caddy_config_path }}:/etc/caddy:ro
       - remnanode-caddy-data:/data
 {% endif %}

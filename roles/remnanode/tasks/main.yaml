@@ -46,10 +46,6 @@
   when: remnanode_caddy_enable
   notify: Reload Caddy
 
-- name: Configure geodata
-  ansible.builtin.import_tasks: geodata.yaml
-  when: remnanode_geodata_enable
-
 - name: Start remnanode
   community.docker.docker_compose_v2:
     project_src: "{{ remnanode_path }}"
