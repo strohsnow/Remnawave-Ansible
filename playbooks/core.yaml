@@ -26,17 +26,6 @@
     - hardening
     - ssh_hardening
 
-- name: Configure firewall
-  hosts: all
-  remote_user: "{{ default_user }}"
-  become: true
-  vars:
-    firewall_flush_rules_and_chains: false
-  roles:
-    - geerlingguy.firewall
-  tags:
-    - firewall
-
 - name: Install Docker
   hosts: all
   remote_user: "{{ default_user }}"
@@ -45,3 +34,18 @@
     - geerlingguy.docker
   tags:
     - docker
+
+- name: Configure firewall
+  hosts: all
+  remote_user: "{{ default_user }}"
+  become: true
+  roles:
+    - geerlingguy.firewall
+  handlers:
+    - name: Restart Docker after firewall flush
+      ansible.builtin.systemd_service:
+        name: docker
+        state: restarted
+      listen: restart firewall
+  tags:
+    - firewall
