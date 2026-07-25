@@ -7,7 +7,7 @@
     path: "{{ remnawave_path }}"
     owner: root
     group: root
-    mode: "0755"
+    mode: "0750"
     state: directory
 
 - name: Create compose file
@@ -16,7 +16,7 @@
     dest: "{{ remnawave_path }}/docker-compose.yaml"
     owner: root
     group: root
-    mode: "0644"
+    mode: "0640"
 
 - name: Create env file
   ansible.builtin.template:
@@ -25,10 +25,11 @@
     owner: root
     group: root
     mode: "0600"
-  notify: Restart remnawave
+  register: remnawave_env
 
-- name: Start remnawave
+- name: Deploy remnawave stack
   community.docker.docker_compose_v2:
     project_src: "{{ remnawave_path }}"
     remove_orphans: true
-    state: present
+    wait: true
+    recreate: "{{ 'always' if remnawave_env is changed else 'auto' }}"
