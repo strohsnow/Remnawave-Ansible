@@ -27,7 +27,7 @@
     mode: "0600"
   register: remnawave_env
 
-- name: Deploy remnawave stack
+- name: Deploy Remnawave
   community.docker.docker_compose_v2:
     project_src: "{{ remnawave_path }}"
     remove_orphans: true
