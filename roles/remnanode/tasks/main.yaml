@@ -7,7 +7,7 @@
     path: "{{ remnanode_path }}"
     owner: root
     group: root
-    mode: "0755"
+    mode: "0750"
     state: directory
 
 - name: Create compose file
@@ -16,7 +16,7 @@
     dest: "{{ remnanode_path }}/docker-compose.yaml"
     owner: root
     group: root
-    mode: "0644"
+    mode: "0640"
 
 - name: Create env file
   ansible.builtin.template:
@@ -25,14 +25,14 @@
     owner: root
     group: root
     mode: "0600"
-  notify: Restart remnanode
+  register: remnanode_env
 
 - name: Create Caddy config directory
   ansible.builtin.file:
     path: "{{ remnanode_caddy_config_path }}"
     owner: root
     group: root
-    mode: "0755"
+    mode: "0750"
     state: directory
   when: remnanode_caddy_enable
 
@@ -42,15 +42,26 @@
     dest: "{{ remnanode_caddy_config_path }}/Caddyfile"
     owner: root
     group: root
-    mode: "0644"
+    mode: "0640"
   when: remnanode_caddy_enable
-  notify: Reload Caddy
+  register: remnanode_caddyfile
 
-- name: Start remnanode
+- name: Deploy remnanode
   community.docker.docker_compose_v2:
     project_src: "{{ remnanode_path }}"
     remove_orphans: true
-    state: present
+    wait: true
+    recreate: "{{ 'always' if remnanode_env is changed else 'auto' }}"
+
+- name: Reload Caddy
+  community.docker.docker_compose_v2_exec:
+    project_src: "{{ remnanode_path }}"
+    service: remnanode-caddy
+    command: caddy reload --config /etc/caddy/Caddyfile
+  when:
+    - remnanode_caddy_enable
+    - remnanode_env is not changed
+    - remnanode_caddyfile is changed
 
 - name: Configure logrotate
   ansible.builtin.import_tasks: logrotate.yaml
