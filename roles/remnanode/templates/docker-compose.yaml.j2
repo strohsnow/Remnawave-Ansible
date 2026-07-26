@@ -24,14 +24,17 @@ services:
     cap_add:
       - NET_ADMIN
     <<: [*common, *env, *logging]
-{% if remnanode_logrotate_enable or remnanode_caddy_enable %}
+{% if remnanode_custom_core_enable or remnanode_logrotate_enable or remnanode_caddy_enable %}
     volumes:
+{% endif %}
+{% if remnanode_custom_core_enable %}
+      - {{ remnanode_path }}/xray:/usr/local/bin/xray:ro
+{% endif %}
 {% if remnanode_logrotate_enable %}
       - {{ remnanode_log_dir_path }}:/var/log/remnanode
 {% endif %}
 {% if remnanode_caddy_enable %}
       - remnanode-caddy-data:/var/lib/remnawave/configs/xray/ssl:ro
-{% endif %}
 {% endif %}
 
 {% if remnanode_caddy_enable %}

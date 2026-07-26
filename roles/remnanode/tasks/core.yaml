@@ -1,0 +1,34 @@
+---
+- name: Install unzip
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+    update_cache: true
+
+- name: Get custom core digest
+  ansible.builtin.uri:
+    url: "{{ remnanode_custom_core_url }}.dgst"
+    return_content: true
+  check_mode: false
+  register: remnanode_custom_core_digest
+
+- name: Download custom core
+  ansible.builtin.get_url:
+    url: "{{ remnanode_custom_core_url }}"
+    dest: "{{ remnanode_path }}/xray.zip"
+    checksum: "sha256:{{ remnanode_custom_core_digest.content | regex_search('SHA2-256=\\s*(\\w+)', '\\1') | first }}"
+    owner: root
+    group: root
+    mode: "0640"
+
+- name: Extract custom core
+  ansible.builtin.unarchive:
+    src: "{{ remnanode_path }}/xray.zip"
+    dest: "{{ remnanode_path }}"
+    remote_src: true
+    include:
+      - xray
+    owner: root
+    group: root
+    mode: "0750"
+  register: remnanode_custom_core

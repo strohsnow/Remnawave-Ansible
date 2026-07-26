@@ -17,4 +17,7 @@ remnanode_caddy_tag: latest
 remnanode_caddy_config_path: "{{ remnanode_path }}/config"
 remnanode_caddy_config: ""
 
+remnanode_custom_core_enable: false
+remnanode_custom_core_url: https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+
 remnanode_additional_services: ""

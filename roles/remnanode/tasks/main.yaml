@@ -46,12 +46,16 @@
   when: remnanode_caddy_enable
   register: remnanode_caddyfile
 
+- name: Configure custom core
+  ansible.builtin.import_tasks: core.yaml
+  when: remnanode_custom_core_enable
+
 - name: Deploy remnanode
   community.docker.docker_compose_v2:
     project_src: "{{ remnanode_path }}"
     remove_orphans: true
     wait: true
-    recreate: "{{ 'always' if remnanode_env is changed else 'auto' }}"
+    recreate: "{{ 'always' if remnanode_env is changed or remnanode_custom_core is changed else 'auto' }}"
 
 - name: Reload Caddy
   community.docker.docker_compose_v2_exec:
@@ -61,6 +65,7 @@
   when:
     - remnanode_caddy_enable
     - remnanode_env is not changed
+    - remnanode_custom_core is not changed
     - remnanode_caddyfile is changed
 
 - name: Configure logrotate
