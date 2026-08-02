@@ -3,8 +3,7 @@ remnawave_postgres_db: postgres
 remnawave_postgres_user: postgres
 remnawave_postgres_password: postgres
 
-remnawave_jwt_auth_secret: secret
-remnawave_jwt_api_tokens_secret: secret
+remnawave_app_secret: secret
 
 remnawave_metrics_user: admin
 remnawave_metrics_pass: admin
@@ -110,6 +109,9 @@ remnawave_caddy_config: |
   }
 
   {{ remnawave_dash_domain }} {
+    encode
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
     @auth_path {
       path /{{ remnawave_auth_path }}
       path /{{ remnawave_auth_path }}/
@@ -141,6 +143,9 @@ remnawave_caddy_config: |
   }
 
   {{ remnawave_sub_page_domain }} {
+    encode
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
     reverse_proxy remnawave-subscription-page:{{ remnawave_sub_page_app_port }}
   }
 

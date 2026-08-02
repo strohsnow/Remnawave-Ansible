@@ -19,8 +19,7 @@ remnawave_postgres_password: ""
 remnawave_redis_host: remnawave-redis
 remnawave_redis_socket: valkey.sock
 
-remnawave_jwt_auth_secret: ""
-remnawave_jwt_api_tokens_secret: ""
+remnawave_app_secret: ""
 
 remnawave_metrics_port: 3001
 remnawave_metrics_user: admin

@@ -9,15 +9,10 @@
     that: remnawave_postgres_password | length > 0
     fail_msg: "remnawave_postgres_password is required"
 
-- name: Assert remnawave_jwt_auth_secret
+- name: Assert remnawave_app_secret
   ansible.builtin.assert:
-    that: remnawave_jwt_auth_secret | length > 0
-    fail_msg: "remnawave_jwt_auth_secret is required"
-
-- name: Assert remnawave_jwt_api_tokens_secret
-  ansible.builtin.assert:
-    that: remnawave_jwt_api_tokens_secret | length > 0
-    fail_msg: "remnawave_jwt_api_tokens_secret is required"
+    that: remnawave_app_secret | length > 0
+    fail_msg: "remnawave_app_secret is required"
 
 - name: Assert remnawave_metrics_pass
   ansible.builtin.assert:

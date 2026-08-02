@@ -81,6 +81,9 @@ remnawave_caddy_config: |
   }
 
   {{ remnawave_dash_domain }} {
+    encode
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    
     @auth_path {
       path /{{ remnawave_auth_path }}
       path /{{ remnawave_auth_path }}/
