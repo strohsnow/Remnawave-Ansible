@@ -9,7 +9,7 @@ firewall_allowed_tcp_ports:
   - "80"
   - "443"
 
-remnawave_backend_tag: 3.1.0
+remnawave_backend_tag: 3.2.0
 remnawave_sub_page_tag: 8.0.0
 remnawave_caddy_tag: 2.11.4
 
